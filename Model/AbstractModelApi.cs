@@ -53,7 +53,7 @@ namespace Model
 
             public override void Enable(int quantity)
             {
-                logicApi.Enable(785, 630, quantity, 40);
+                logicApi.Enable(800, 655, quantity, 70);
             }
 
             public override ObservableCollection<BallUI> GetAllBalls()

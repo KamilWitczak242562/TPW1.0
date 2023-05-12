@@ -21,10 +21,6 @@ namespace Dane
         {
             private readonly object locked = new object();
 
-            private readonly object barrier = new object();
-
-            private int queue = 0;
-
             private bool enabled = false;
 
             private Scene scene;

@@ -86,6 +86,7 @@ namespace Logika
             private void CheckCollision(Ball orb)
             {
                 AreaCollision(orb);
+                BallCollision(orb);
             }
 
             private void AreaCollision(Ball orb)
@@ -109,6 +110,30 @@ namespace Logika
                 {
                     orb.YSpeed = -orb.YSpeed;
                     orb.Y = orb.Radius;
+                }
+            }
+
+            private void BallCollision(Ball orb)
+            {
+                foreach (Ball o in DataApi.GetBalls())
+                {
+                    if (o == orb)
+                    {
+                        continue;
+                    }
+                    double xDiff = o.X - orb.X;
+                    double yDiff = o.Y - orb.Y;
+                    double distance = Math.Sqrt((xDiff * xDiff) + (yDiff * yDiff));
+                    if (distance <= (orb.Radius))
+                    {
+                        double newSpeed = ((o.XSpeed * (o.Weight - orb.Weight) + (orb.Weight * orb.XSpeed * 2)) / (o.Weight + orb.Weight));
+                        orb.XSpeed = ((orb.XSpeed * (orb.Weight - o.Weight) + (o.Weight * o.XSpeed * 2)) / (o.Weight + orb.Weight));
+                        o.XSpeed = newSpeed;
+
+                        newSpeed = ((o.YSpeed * (o.Weight - orb.Weight)) + (orb.Weight * orb.YSpeed * 2) / (o.Weight + orb.Weight));
+                        orb.YSpeed = ((orb.YSpeed * (orb.Weight - o.Weight)) + (o.Weight * o.YSpeed * 2) / (o.Weight + orb.Weight));
+                        o.YSpeed = newSpeed;
+                    }
                 }
             }
         }

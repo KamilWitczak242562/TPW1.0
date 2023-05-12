@@ -11,8 +11,9 @@ namespace Dane
         private double y;
         private double radius;
         private double[] speed = new double[2];
+        private double weight;
 
-        public Ball(double x, double y, double radius)
+        public Ball(double x, double y, double radius, double weight)
         {
             this.x = x;
             this.y = y;
@@ -27,6 +28,8 @@ namespace Dane
             ySpeed = (random.Next(-1, 1) < 0) ? ySpeed : -ySpeed;
             this.speed[0] = xSpeed;
             this.speed[1] = ySpeed;
+            this.weight = weight;
+
         }
 
         public double X 
@@ -70,6 +73,12 @@ namespace Dane
             get { return speed[1]; }
             set { speed[1] = value; }
         }
+
+        public double Weight
+        {
+            get { return weight; }
+        }
+
 
         public void move()
         {

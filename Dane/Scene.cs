@@ -64,7 +64,9 @@ namespace Dane
                 valid = true;
 
             } while (!valid);
-            return new Ball(x, y, radius);
+            int r = random.Next(40, radius);
+            double w = r / 100.0;
+            return new Ball(x, y, r, w);
         }
 
         public void GenerateBallsList(int ballsQuantity, int ballRadius)
