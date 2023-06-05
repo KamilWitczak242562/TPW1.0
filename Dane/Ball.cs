@@ -51,7 +51,7 @@ namespace Dane
                 OnPropertyChanged("Y");
             }
         }
-        [JsonIgnore]
+        
         public double Radius
         {
             get { return radius; }

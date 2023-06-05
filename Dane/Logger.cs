@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading;
 using System.Text.Json;
 using System.IO;
+using System.Timers;
 using static Dane.AbstractDataApi;
 
 namespace Dane
@@ -12,54 +13,33 @@ namespace Dane
     internal class Logger
     {
         private static List<Ball> balls;
-        private Stopwatch stopWatch = new Stopwatch();
+        private System.Timers.Timer timer;
 
         public Logger(List<Ball> ballL)
         {
             balls = ballL;
-            Thread t = new Thread(() =>
+            timer = new System.Timers.Timer(1000); 
+            timer.Elapsed += TimerElapsed;
+            timer.Start();
+        }
+
+        private void TimerElapsed(object sender, ElapsedEventArgs e)
+        {
+            using (StreamWriter streamWriter = new StreamWriter("C:\\Studia\\TPW1.0\\Dane\\ballLog.txt", true))
             {
-                ClearLogFile();
-                stopWatch.Start();
-                while (true)
+                streamWriter.WriteLine("\n");
+                string stamp = ($"Ball data: {DateTime.Now:R}");
+                foreach (Ball ball in balls)
                 {
-                    if (stopWatch.ElapsedMilliseconds >= 1000)
-                    {
-                        stopWatch.Restart();
-                        using (StreamWriter streamWriter = new StreamWriter("G:\\Sem IV\\TPW2.0\\Dane\\orbLog.txt", true))
-                        {
-                            string stamp = ($"Ball data: {DateTime.Now:R}");
-                            foreach (Ball ball in balls)
-                            {
-                                streamWriter.WriteLine(stamp + JsonSerializer.Serialize(ball));
-                            }
-
-                        }
-                    }
+                    streamWriter.WriteLine(stamp + JsonSerializer.Serialize(ball));
                 }
-            })
-            {
-                IsBackground = true
-            };
-            t.Start();
-        }
-
-        private void ClearLogFile()
-        {
-            try
-            {
-                File.WriteAllText("G:\\Sem IV\\TPW2.0\\Dane\\orbLog.txt", string.Empty);
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine("An error occurred while clearing the log file: " + ex.Message);
             }
         }
 
-        public void stop()
+        public void Stop()
         {
-            stopWatch.Reset();
-            stopWatch.Stop();
+            timer.Stop();
+            timer.Dispose();
         }
     }
 }
